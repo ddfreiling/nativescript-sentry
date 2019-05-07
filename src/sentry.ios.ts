@@ -2,12 +2,92 @@
 /// <reference path="./typings/sentry-api.ios.d.ts" />
 
 import { BreadCrumb, ExceptionOptions, MessageOptions, SentryUser } from './';
+import * as Raven from 'raven-js';
+
+export class RavenClient {
+  opts: any;
+  _dsn: string;
+  constructor(dsn, opts) {
+    this._dsn = dsn;
+    this.opts = {
+      allowSecretKey: true,
+      allowDuplicates: true,
+      handlePromiseRejection: false,
+      ...opts
+    };
+    Raven.config(dsn, this.opts);
+    (<any>Raven).debug = true;
+  }
+
+  install() {
+    Raven.install();
+    // Raven.addPlugin(
+    //   require('./raven-plugin'),
+    //   {
+    //     nativeClientAvailable: false,
+    //     handlePromiseRejection: this.opts.handlePromiseRejection
+    //   }
+    // );
+  }
+
+  setDataCallback(callback) {
+    Raven.setDataCallback(callback);
+  }
+
+  setShouldSendCallback(callback) {
+    Raven.setShouldSendCallback(callback);
+  }
+
+  setUserContext(user) {
+    Raven.setUserContext(user);
+  }
+
+  setTagsContext(tags) {
+    Raven.setTagsContext(tags);
+  }
+
+  setExtraContext(extra) {
+    Raven.setExtraContext(extra);
+  }
+
+  captureException(ex, options) {
+    Raven.captureException(ex, options);
+  }
+
+  captureBreadcrumb(breadcrumb) {
+    Raven.captureBreadcrumb(breadcrumb);
+  }
+
+  captureMessage(message, options) {
+    Raven.captureMessage(message, options);
+  }
+
+  setRelease(release) {
+    Raven.setRelease(release);
+  }
+
+  clearContext() {
+    return Raven.clearContext();
+  }
+
+  context(options, func, args) {
+    return Raven.context(options, func, args);
+  }
+
+  wrap(options, func) {
+    return Raven.wrap(options, func);
+  }
+}
 
 export class Sentry {
+  static _ravenClient: RavenClient = null;
   public static init(dsn: string) {
     SentryClient.sharedClient = SentryClient.alloc().initWithDsnDidFailWithError(dsn);
     SentryClient.sharedClient.startCrashHandlerWithError();
     SentryClient.sharedClient.enableAutomaticBreadcrumbTracking();
+
+    Sentry._ravenClient = new RavenClient(dsn, {});
+    Sentry._ravenClient.install();
   }
 
   public static captureMessage(message: string, options?: MessageOptions) {
@@ -29,26 +109,24 @@ export class Sentry {
   }
 
   public static captureException(exception: Error, options?: ExceptionOptions) {
-    const event = SentryEvent.alloc().initWithLevel(SentrySeverity.kSentrySeverityError);
+    // const event = SentryEvent.alloc().initWithLevel(SentrySeverity.kSentrySeverityError);
 
-    // create a string of the entire Error for sentry to display as much info as possible
-    event.message = JSON.stringify({
-      message: exception.message,
-      stacktrace: exception.stack,
-      name: exception.name
-    });
+    // // create a string of the entire Error for sentry to display as much info as possible
+    // event.message = JSON.stringify({
+    //   message: exception.message,
+    //   // stacktrace: exception.stack,
+    //   name: exception.name
+    // });
 
-    if (options && options.extra) {
-      event.extra = NSDictionary.dictionaryWithDictionary(options.extra as NSDictionary<string, any>);
-    }
+    // if (options && options.extra) {
+    //   event.extra = NSDictionary.dictionaryWithDictionary(options.extra as NSDictionary<string, any>);
+    // }
 
-    if (options && options.tags) {
-      event.tags = NSDictionary.dictionaryWithDictionary(options.tags as NSDictionary<string, string>);
-    }
+    // if (options && options.tags) {
+    //   event.tags = NSDictionary.dictionaryWithDictionary(options.tags as NSDictionary<string, string>);
+    // }
 
-    SentryClient.sharedClient.sendEventWithCompletionHandler(event, () => {
-      // nothing here
-    });
+    Sentry._ravenClient.captureException(exception, options);
   }
 
   public static captureBreadcrumb(breadcrumb: BreadCrumb) {

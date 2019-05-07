@@ -10,7 +10,7 @@ import { NativeScriptCommonModule } from "nativescript-angular/common";
     NativeScriptModule,
     NativeScriptCommonModule,
     SentryModule.forRoot({
-      dsn: "https://10b5f0389dfe422cb6127e67c4af05e9@sentry.io/1320301"
+      dsn: "https://aedd5457c1194e2c8ec31c8e6453ea4c@sentry.io/1424834"
     })
   ],
   declarations: [AppComponent],

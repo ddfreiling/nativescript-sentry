@@ -24,9 +24,9 @@
     "demo.android": "npm run ngc && cd ../demo && tns run android --syncAllFiles --emulator",
     "demo.reset": "cd ../demo && npx rimraf -- hooks node_modules platforms package-lock.json",
     "demo.ng.ios": "npm run ngc && cd ../demo-ng && tns run ios --syncAllFiles --emulator",
-    "demo.ng.ios.aot": "npm run ngc && cd ../demo-ng && tns run ios --bundle --env.uglify --env.aot --emulator",
+    "demo.ng.ios.aot": "npm run ngc && cd ../demo-ng && tns debug ios --bundle --syncAllFiles --env.uglify --env.sourceMap --env.aot --emulator --inspector",
     "demo.ng.android": "npm run ngc && cd ../demo-ng && tns run android --syncAllFiles --emulator",
-    "demo.ng.android.aot": "npm run ngc && cd ../demo-ng && tns run android --bundle --env.uglify --env.aot --emulator",
+    "demo.ng.android.aot": "npm run ngc && cd ../demo-ng && tns run android --bundle --syncAllFiles --env.uglify --env.aot --emulator",
     "demo.ng.reset": "cd ../demo-ng && npx rimraf -- hooks node_modules platforms package-lock.json",
     "plugin.prepare": "npm run build && cd ../demo && tns plugin remove nativescript-sentry && tns plugin add ../src",
     "plugin.ng.prepare": "npm run build && cd ../demo-ng && tns plugin remove nativescript-sentry && tns plugin add ../src",
@@ -68,6 +68,9 @@
   "license": "Apache-2.0",
   "homepage": "https://github.com/danielgek/nativescript-sentry",
   "readmeFilename": "README.md",
+  "dependencies": {
+    "raven-js": "^3.27.0"
+  },
   "devDependencies": {
     "@angular/compiler": "~7.2.8",
     "@angular/compiler-cli": "~7.2.8",
@@ -90,6 +93,5 @@
       "git add"
     ]
   },
-  "dependencies": {},
   "bootstrapper": "nativescript-plugin-seed"
 }

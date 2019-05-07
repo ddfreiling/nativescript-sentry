@@ -19,6 +19,11 @@
   <Button
     (tap)="onTapNative()"
     class="btn btn-primary"
+    text="Uncaught Error (throw) (crash app)"
+  ></Button>
+  <Button
+    (tap)="onTapNativeCodeCrash()"
+    class="btn btn-primary"
     text="Uncaught Error (crash app)"
   ></Button>
   <Label
@@ -32,12 +37,12 @@
   <Button
     (tap)="onTapTryError()"
     class="btn btn-primary"
-    text="Try trow with Error test"
+    text="Try throw with Error test"
   ></Button>
   <Button
     (tap)="onTapTry()"
     class="btn btn-primary"
-    text="Try trow without Error test"
+    text="Try throw without Error test"
   ></Button>
   <Button
     (tap)="onTapMessage()"

@@ -40,9 +40,13 @@ export class AppComponent {
     throw "Uncaught Error Exception thrown inside NativeScript app.";
   }
 
+  onTapNativeCodeCrash() {
+    (<any>UIApplication.sharedApplication).letsCrash();
+  }
+
   onTapTry() {
     try {
-      throw new Error("Oh No! Something went wrong.");
+      throw new Error("onTapTry");
     } catch (error) {
       Sentry.captureException(error, {
         tags: {
@@ -60,7 +64,7 @@ export class AppComponent {
 
   onTapTryError() {
     try {
-      throw new Error("Oh No! Something went wrong.");
+      throw new Error("onTapTryError");
     } catch (error) {
       Sentry.captureException(error, {
         tags: {
@@ -106,7 +110,7 @@ export class AppComponent {
 
   onTapCaptureWithExtras() {
     try {
-      throw new Error("try catch exeption example");
+      throw new Error("try catch exception example");
     } catch (error) {
       Sentry.captureException(error, {
         tags: {
