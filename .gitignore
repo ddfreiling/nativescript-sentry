@@ -19,6 +19,7 @@ demo/platforms
 demo/node_modules
 demo-ng/platforms
 demo-ng/node_modules
+!demo-ng/webpack.config.js
 node_modules
 publish/src
 publish/package
